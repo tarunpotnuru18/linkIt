@@ -8,8 +8,9 @@ interface DocCardProps {
   description: string;
   category: string;
   tags: string[];
-  name: string;
+  name?: string;
   linkId: string;
+  shareMode?: boolean;
   setMoreOpen: (x: any, b: boolean) => void;
   setEditOpen: (x: any, b: boolean) => void;
   onsuccess: () => void;
@@ -24,6 +25,7 @@ export function DocCard({
   setMoreOpen,
   setEditOpen,
   onsuccess,
+  shareMode,
 }: DocCardProps) {
   let [loading, setloading] = useState(true);
   let [newDescription, setNewDescription] = useState("");
@@ -92,14 +94,16 @@ export function DocCard({
                 {title}
               </div>
 
-              <button
-                onClick={() => {
-                  deleteLink(linkId);
-                }}
-                className=" text-white rounded-full p-[2px] hover:bg-white hover:text-black w-[20px] h-[20px] box-border "
-              >
-                <Trash2 size={16} />
-              </button>
+              {!shareMode && (
+                <button
+                  onClick={() => {
+                    deleteLink(linkId);
+                  }}
+                  className=" text-white rounded-full p-[2px] hover:bg-white hover:text-black w-[20px] h-[20px] box-border "
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
             </div>
             <div className=" text-gray-300">
               <p> {description}</p>
@@ -115,26 +119,25 @@ export function DocCard({
         <div className="w-full flex gap-4  ">
           <button
             onClick={() => {
-              setMoreOpen(
-                {  tags, description, title, linkId, category },
-                true
-              );
+              setMoreOpen({ tags, description, title, linkId, category }, true);
             }}
             className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
           >
             More
           </button>
-          <button
-            onClick={() => {
-              setEditOpen(
-                {  tags, description, title, linkId, category },
-                true
-              );
-            }}
-            className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
-          >
-            Edit
-          </button>
+          {shareMode && (
+            <button
+              onClick={() => {
+                setEditOpen(
+                  { tags, description, title, linkId, category },
+                  true
+                );
+              }}
+              className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
+            >
+              Edit
+            </button>
+          )}
         </div>
       </div>
     </>

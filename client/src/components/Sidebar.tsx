@@ -8,6 +8,7 @@ export function SideBar({
   filter: string[];
 }) {
   let [open, setOpen] = useState(false);
+
   return (
     <>
       <div
@@ -30,7 +31,7 @@ export function SideBar({
           <button
             className={`w-full  text-white flex flex-col gap-[5px]${
               !open && "justify-center"
-            }   items-center cursor-pointer py-[16px] px-[5px] hover:bg-[#27272A]  rounded ${
+            }   items-center cursor-pointer py-[16px] px-[5px]   rounded ${
               filter.includes("link") && "bg-amber-200"
             }`}
             onClick={() => {
@@ -48,8 +49,8 @@ export function SideBar({
           <button
             className={`w-full  text-white flex flex-col gap-[5px]${
               !open && "justify-center"
-            }   items-center cursor-pointer py-[16px] px-[5px] hover:bg-[#27272A]  rounded  ${
-              filter.includes("link") && "bg-amber-200"
+            }   items-center cursor-pointer py-[16px] px-[5px]   rounded  ${
+              filter.includes("document") && "bg-amber-200"
             } `}
             onClick={() => {
               setFilter((prev: any) => {

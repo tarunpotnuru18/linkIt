@@ -10,8 +10,9 @@ interface LinkCardProps {
   description: string;
   category: string;
   tags: string[];
-  name: string;
+  name?: string;
   linkId: string;
+  shareMode?: boolean;
   setMoreOpen: (x: any, b: boolean) => void;
   setEditOpen: (x: any, b: boolean) => void;
   onsuccess: () => void;
@@ -23,6 +24,7 @@ export function LinkCard({
   tags,
   category,
   name,
+  shareMode,
   linkId,
   setMoreOpen,
   setEditOpen,
@@ -96,14 +98,14 @@ export function LinkCard({
                 {title}
               </div>
 
-              <button
+              {!shareMode&&<button
                 onClick={() => {
                   deleteLink(linkId);
                 }}
                 className=" text-white rounded-full p-[2px] hover:bg-white hover:text-black w-[20px] h-[20px] box-border "
               >
                 <Trash2 size={16} />
-              </button>
+              </button>}
             </div>
             <div className=" text-gray-300">
               <p> {description}</p>
@@ -128,17 +130,19 @@ export function LinkCard({
           >
             More
           </button>
-          <button
-            onClick={() => {
-              setEditOpen(
-                { link, tags, description, title, linkId, category },
-                true
-              );
-            }}
-            className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
-          >
-            Edit
-          </button>
+          {!shareMode && (
+            <button
+              onClick={() => {
+                setEditOpen(
+                  { link, tags, description, title, linkId, category },
+                  true
+                );
+              }}
+              className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
+            >
+              Edit
+            </button>
+          )}
         </div>
       </div>
     </>

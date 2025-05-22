@@ -56,8 +56,8 @@ export function Add({
 
   return (
     <>
-      <div className=" fixed bg-[#0f0f0f] inset-0 min-h-screen text-white flex  justify-center items-center ">
-        <div className="flex flex-col bg-[#171717] border-[#262626] border-1 rounded-md p-[15px] px-[30px] min-w-[520px]">
+      <div className=" fixed bg-[#0f0f0f] inset-0 min-h-screen text-white flex  justify-center items-center overflow-y-scroll py-[5px]">
+        <div className="flex flex-col bg-[#171717] border-[#262626] border-1 rounded-md p-[15px] px-[30px] w-[520px] ">
           <div className="flex justify-between">
             <span className="text-[15px] font-inter">New Link</span>
             <button

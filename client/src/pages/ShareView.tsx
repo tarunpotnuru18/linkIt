@@ -7,18 +7,18 @@ import { Edit } from "../components/Edit.tsx";
 import { SideBar } from "../components/Sidebar.tsx";
 import { Share } from "../components/Share.tsx";
 import { DocCard } from "../components/DocCard.tsx";
-
+import { useParams } from "react-router-dom";
 export interface LinkStructure {
   description: string;
   link: string;
   tags: string[];
   title: string;
   _id: string;
-  userID: { userName: string; _id: string };
+
   category: string;
 }
 
-export function Links() {
+export function ShareView() {
   let [isaddOpen, setAddOpen] = useState<boolean>(false);
   let [isEditOpen, setEditOpen] = useState<boolean>(false);
   let [linkData, setLinkData] = useState<any>({});
@@ -29,26 +29,30 @@ export function Links() {
   let [refresh, setRefresh] = useState<number>(1);
   let [shareOpen, setShareOpen] = useState<boolean>(false);
   let [tags, setTags] = useState<string[]>([]);
-  useEffect(() => {
-    console.log("filter is changed :", filter);
-  }, [filter]);
+  let { shareId } = useParams();
+  console.log(shareId);
+  let [userName, setUserName] = useState("");
 
   async function fetchLinks() {
     try {
-      let data = await fetch(`${import.meta.env.VITE_API_URL}show`, {
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+      console.log("I AM CALLED");
+      let data = await fetch(
+        `${import.meta.env.VITE_API_URL}getShare/${shareId}`
+      );
 
-      let response: { success: boolean; links: LinkStructure[] } =
-        await data.json();
+      let response: {
+        success: boolean;
+        links: LinkStructure[];
+        userName?: string;
+      } = await data.json();
 
       if (response.success === true) {
         console.log("response links", response.links);
         let allTags = response.links.flatMap((ele) => ele.tags);
         console.log(allTags, "all tags");
+        if (response.userName) {
+          setUserName(response.userName);
+        }
         if (filter.length === 0) {
           setLinks(response.links);
         } else {
@@ -71,7 +75,7 @@ export function Links() {
   }
   useEffect(() => {
     fetchLinks();
-  }, [refresh, filter]);
+  }, [refresh, filter, shareId]);
   function onSuccess() {
     setRefresh((prev) => prev + 1);
   }
@@ -99,38 +103,27 @@ export function Links() {
               <div className="flex-1 flex flex-col">
                 <div className="w-full flex justify-between items-center p-[10px] lg:px-[30px]">
                   <div className=" flex justify-center font-medium ">
-                    DASH BOARD
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => {
-                        setShareOpen(true);
-                      }}
-                      className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter font-medium"
-                    >
-                      share
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleAddClick(true);
-                      }}
-                      className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter font-medium"
-                    >
-                      Add item
-                    </button>
+                    SHARE DASH-BOARD
                   </div>
                 </div>
 
                 {links.length === 0 ? (
                   <>
                     <div className="flex-1 flex items-center justify-center">
+                      {userName && (
+                        <div>{`you are viewing link store of ${userName} `}</div>
+                      )}
                       <div>there are no contents</div>
                     </div>
                   </>
                 ) : (
                   <div className="flex-1 ">
+                    {userName && (
+                        <div>{`you are viewing link store of ${userName} `}</div>
+                      )}
                     <div className="grid grid-cols md:grid-cols-2 lg:grid-cols-3  gap-[10px]  p-[20px]   ">
-                      {links.map((linkItem: any) => {
+                      {links?.map((linkItem: any) => {
+                        console.log(links);
                         if (linkItem.category === "document") {
                           return (
                             <DocCard
@@ -138,12 +131,13 @@ export function Links() {
                               description={linkItem.description}
                               title={linkItem.title}
                               tags={linkItem.tags}
-                              name={linkItem.userId.userName}
+                           
                               key={linkItem._id}
                               linkId={linkItem._id}
                               setMoreOpen={handleMore}
                               setEditOpen={handleEdit}
                               onsuccess={onSuccess}
+                              shareMode
                             />
                           );
                         }
@@ -154,12 +148,12 @@ export function Links() {
                             description={linkItem.description}
                             title={linkItem.title}
                             tags={linkItem.tags}
-                            name={linkItem.userId.userName}
                             key={linkItem._id}
                             linkId={linkItem._id}
                             setMoreOpen={handleMore}
                             setEditOpen={handleEdit}
                             onsuccess={onSuccess}
+                            shareMode
                           />
                         );
                       })}
@@ -171,8 +165,6 @@ export function Links() {
           </>
         )}
 
-        {isaddOpen && <Add open={setAddOpen} onSuccess={onSuccess} />}
-
         {isMoreOpen && (
           <More
             open={setMoreOpen}
@@ -183,20 +175,6 @@ export function Links() {
             linkId={linkData.id}
           />
         )}
-        {isEditOpen && (
-          <Edit
-            intialLink={linkData.link}
-            intialDescription={linkData.description}
-            intialCategory={linkData.category}
-            intialTags={linkData.tags}
-            intialTitle={linkData.title}
-            onsuccess={onSuccess}
-            open={setEditOpen}
-            linkId={linkData.linkId}
-          ></Edit>
-        )}
-
-        {shareOpen && <Share onClose={setShareOpen} />}
       </div>
     </>
   );

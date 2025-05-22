@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { GlobalState } from "./store/context";
 import { Private } from "./components/private";
 import { Links } from "./pages/DashBoard";
+import { ShareView } from "./pages/ShareView";
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
             }
           >
             <Route path="/links" element={<Links />}></Route>
+            <Route path="/share/:shareId" element={<ShareView />} />
           </Route>
         </Routes>
         <Toaster richColors />

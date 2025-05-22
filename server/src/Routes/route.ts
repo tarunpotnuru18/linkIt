@@ -21,6 +21,6 @@ router.post("/delete/:linkId", authentication, del);
 router.get("/authValid", authentication, authValidator);
 router.post("/update/:id", authentication, update);
 router.get("/show", authentication, show);
-router.get("/linkData", authentication, linkDataLoader);
+router.get("/linkData",  linkDataLoader);
 router.post("/share",authentication, share);
-router.get("/getShare",getShare)
+router.get("/getShare/:shareId",getShare)
