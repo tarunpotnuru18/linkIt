@@ -56,7 +56,7 @@ export function Add({
 
   return (
     <>
-      <div className=" fixed bg-[#0f0f0f] inset-0 min-h-screen text-white flex  justify-center items-center overflow-y-scroll py-[5px]">
+      <div className=" fixed bg-[#0f0f0f] inset-0 min-h-screen text-white flex  justify-center items-center overflow-y-auto py-[5px]">
         <div className="flex flex-col bg-[#171717] border-[#262626] border-1 rounded-md p-[15px] px-[30px] w-[520px] ">
           <div className="flex justify-between">
             <span className="text-[15px] font-inter">New Link</span>
@@ -130,7 +130,7 @@ export function Add({
                 setCurrentTag(e.currentTarget.value);
               }}
               value={currentTag}
-              className="border text-white"
+              className="border text-white caret-white px-[1px]"
             />
             <button
               onClick={() => {
@@ -160,7 +160,7 @@ export function Add({
               );
             })}
           </div>
-
+  
           <div className="flex justify-center w-full mt-[10px]">
             <button
               className="bg-black p-[5px] border-gray-300 border rounded-md"
@@ -172,6 +172,7 @@ export function Add({
             </button>
           </div>
         </div>
+        
       </div>
     </>
   );

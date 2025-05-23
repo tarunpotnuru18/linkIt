@@ -7,6 +7,7 @@ import { Edit } from "../components/Edit.tsx";
 import { SideBar } from "../components/Sidebar.tsx";
 import { Share } from "../components/Share.tsx";
 import { DocCard } from "../components/DocCard.tsx";
+import { useNavigate } from "react-router-dom";
 
 export interface LinkStructure {
   description: string;
@@ -29,9 +30,21 @@ export function Links() {
   let [refresh, setRefresh] = useState<number>(1);
   let [shareOpen, setShareOpen] = useState<boolean>(false);
   let [tags, setTags] = useState<string[]>([]);
+  let navigate = useNavigate();
   useEffect(() => {
-    console.log("filter is changed :", filter);
+    // console.log("filter is changed :", filter);
   }, [filter]);
+  useEffect(() => {
+    if (isEditOpen === true || isMoreOpen === true || isaddOpen === true) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isEditOpen, isMoreOpen, isaddOpen]);
 
   async function fetchLinks() {
     try {
@@ -46,9 +59,9 @@ export function Links() {
         await data.json();
 
       if (response.success === true) {
-        console.log("response links", response.links);
+        // console.log("response links", response.links);
         let allTags = response.links.flatMap((ele) => ele.tags);
-        console.log(allTags, "all tags");
+        // console.log(allTags, "all tags");
         if (filter.length === 0) {
           setLinks(response.links);
         } else {
@@ -62,11 +75,26 @@ export function Links() {
         throw new Error();
       }
 
-      console.log("links", response.links);
+      // console.log("links", response.links);
       setLoading(false);
     } catch (error) {
       toast.error("error while fetching links");
       setLoading(false);
+    }
+  }
+  async function logOut() {
+    try {
+      let data = await fetch(`${import.meta.env.VITE_API_URL}logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+      let response = await data.json();
+      if (response.success == true) {
+        toast.success("log out successful");
+        navigate("/signin");
+      }
+    } catch (error) {
+      toast.error("error while logging out");
     }
   }
   useEffect(() => {
@@ -117,6 +145,14 @@ export function Links() {
                       className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter font-medium"
                     >
                       Add item
+                    </button>
+                    <button
+                      onClick={() => {
+                        logOut();
+                      }}
+                      className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter font-medium"
+                    >
+                      logout
                     </button>
                   </div>
                 </div>
@@ -181,6 +217,9 @@ export function Links() {
             tag={linkData.tag}
             title={linkData.title}
             linkId={linkData.id}
+            userName={linkData.userName}
+            image={linkData.image}
+            category={linkData.category}
           />
         )}
         {isEditOpen && (

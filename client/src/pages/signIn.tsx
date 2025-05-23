@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import z from "zod";
 import { Eye, EyeOff, CircleX } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../store/context";
 export function SignIn() {
   let [email, setEmail] = useState<string>("");
@@ -10,6 +10,7 @@ export function SignIn() {
   let [showPassword, setShowPassword] = useState<boolean>(false);
   let [emailError, setEmailError] = useState("");
   let { setAuthenticated } = useContext(authContext);
+  let navigate = useNavigate();
   // let navigate = useNavigate();
   interface signInRequest {
     email: string;
@@ -36,6 +37,7 @@ export function SignIn() {
       console.log(data);
       if (data.success) {
         setAuthenticated(true);
+        navigate("/links");
         return "signin successful";
       } else {
         throw data;

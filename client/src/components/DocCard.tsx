@@ -30,7 +30,7 @@ export function DocCard({
   let [loading, setloading] = useState(true);
   let [newDescription, setNewDescription] = useState("");
   let [newTitle, setNewTitle] = useState("");
-  let [newImage, setNewImage] = useState("");
+  let [image,setNewImage] = useState(docImg)
 
   async function deleteLink(id: string) {
     console.log("i am executed", id);
@@ -119,9 +119,9 @@ export function DocCard({
         <div className="w-full flex gap-4  ">
           <button
             onClick={() => {
-              setMoreOpen({ tags, description, title, linkId, category }, true);
+              setMoreOpen({ tags, description, title, linkId, category,userName:name,image }, true);
             }}
-            className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
+            className="inline-block rounded bg-zinc-700 px-4 py-2 text-sm font-medium hover:bg-zinc-600 cursor-pointer"
           >
             More
           </button>
@@ -133,7 +133,7 @@ export function DocCard({
                   true
                 );
               }}
-              className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
+              className="inline-block rounded bg-zinc-700 px-4 py-2 text-sm font-medium hover:bg-zinc-600 cursor-pointer"
             >
               Edit
             </button>

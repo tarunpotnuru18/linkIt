@@ -33,7 +33,7 @@ export function LinkCard({
   let [loading, setloading] = useState(true);
   let [newDescription, setNewDescription] = useState("");
   let [newTitle, setNewTitle] = useState("");
-  let [newImage, setNewImage] = useState("");
+  let [newImage, setNewImage] = useState(linkImg);
 
   async function deleteLink(id: string) {
     console.log("i am executed", id);
@@ -67,7 +67,7 @@ export function LinkCard({
         }
       );
       let response = await data.json();
-      console.log(response);
+      // console.log(response);
       title = response.title;
       setNewTitle(response.title);
       setNewImage(response.image);
@@ -79,7 +79,8 @@ export function LinkCard({
   useEffect(() => {
     linkPreview(link);
   }, []);
-
+ 
+  // console.log(link,newImage)
   return (
     <>
       <div className=" border-[#3d444d] border-[2px] rounded-md px-[10px] py-[10px] gap-4 flex flex-col items-center justify-around overflow-hidden">
@@ -98,16 +99,18 @@ export function LinkCard({
                 {title}
               </div>
 
-              {!shareMode&&<button
-                onClick={() => {
-                  deleteLink(linkId);
-                }}
-                className=" text-white rounded-full p-[2px] hover:bg-white hover:text-black w-[20px] h-[20px] box-border "
-              >
-                <Trash2 size={16} />
-              </button>}
+              {!shareMode && (
+                <button
+                  onClick={() => {
+                    deleteLink(linkId);
+                  }}
+                  className=" text-white rounded-full p-[2px] hover:bg-white hover:text-black w-[20px] h-[20px] box-border "
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
             </div>
-            <div className=" text-gray-300">
+            <div className=" text-gray-300 line-clamp-2">
               <p> {description}</p>
             </div>
           </div>
@@ -122,11 +125,20 @@ export function LinkCard({
           <button
             onClick={() => {
               setMoreOpen(
-                { link, tags, description, title, linkId, category },
+                {
+                  link,
+                  tags,
+                  description,
+                  title,
+                  linkId,
+                  category,
+                userName:name,
+                  image: newImage,
+                },
                 true
               );
             }}
-            className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
+            className="inline-block rounded bg-zinc-700 px-4 py-2 text-sm font-medium hover:bg-zinc-600 cursor-pointer"
           >
             More
           </button>
@@ -138,11 +150,19 @@ export function LinkCard({
                   true
                 );
               }}
-              className="bg-transparent text-white rounded px-[12px] py-[5px] border border-[#27272a] hover:bg-[#27272a] cursor-pointer "
+              className="inline-block rounded bg-zinc-700 px-4 py-2 text-sm font-medium hover:bg-zinc-600 cursor-pointer"
             >
               Edit
             </button>
           )}
+
+          <a
+            href={link}
+            target="_blank"
+            className="inline-block rounded bg-zinc-700 px-4 py-2 text-sm font-medium hover:bg-zinc-600 cursor-pointer"
+          >
+            Visit Link
+          </a>
         </div>
       </div>
     </>

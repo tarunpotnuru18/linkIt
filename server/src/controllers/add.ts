@@ -31,6 +31,7 @@ export async function add(req: Request, res: Response) {
         title: linkTest.title,
         description: linkTest.description,
         category: linkTest.category,
+        
       },
     });
   } catch (error: any) {

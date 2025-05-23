@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Eye, EyeOff, Circle, CircleCheck, CircleX } from "lucide-react";
 import { toast } from "sonner";
 import z from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../store/context";
 export function SignUp() {
   let [userName, setUserName] = useState<string>("");
@@ -12,6 +12,7 @@ export function SignUp() {
   let [emailError, setEmailError] = useState("");
   let [userNameError, setUserNameError] = useState("");
   let { setAuthenticated } = useContext(authContext);
+  let navigate = useNavigate();
   interface signUpRequest {
     userName: string;
     email: string;
@@ -41,6 +42,7 @@ export function SignUp() {
       console.log(data);
       if (data.success) {
         setAuthenticated(true);
+        navigate("/links");
         return "signup Successful";
       } else {
         throw new Error(data?.message || "signup failed");

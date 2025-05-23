@@ -23,8 +23,8 @@ function App() {
             }
           >
             <Route path="/links" element={<Links />}></Route>
-            <Route path="/share/:shareId" element={<ShareView />} />
           </Route>
+            <Route path="/share/:shareId" element={<ShareView />} />
         </Routes>
         <Toaster richColors />
       </GlobalState>

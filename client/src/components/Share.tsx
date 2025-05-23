@@ -50,10 +50,22 @@ export function Share({ onClose }: { onClose: (x: boolean) => void }) {
       toast.error(error.message);
     }
   }
+  async function handleCopy() {
+
+    if(isSharing){
+      navigator.clipboard.writeText(url);
+      toast.success("copied")
+    }else{
+      toast.message("start sharing to copy")
+    }
+
+  }
 
   useEffect(() => {
     if (isSharing) {
       handleShare();
+    } else {
+      setUrl("start sharing to get a url");
     }
   }, [isSharing]);
 
@@ -61,48 +73,50 @@ export function Share({ onClose }: { onClose: (x: boolean) => void }) {
     <>
       <div className="h-screen bg-black w-screen fixed inset-0 flex items-center justify-center">
         <div className="flex flex-col bg-[#171717] border-[#262626] border-1 rounded-md p-[15px] px-[30px] min-w-[520px]">
-          <input
-            type="text"
-            readOnly
-            value={url}
-            className="bg-red-200 rounded-md text-black"
-          />
-          <div className="flex justify-between">
+          <div className="my-[20px] flex justify-end">
+            <button
+              onClick={() => onClose(false)}
+              className="border-gray-400 border w-[20px] h-[20px] p-[5px] box-content bg-white rounded-full text-black font-inter  "
+            >
+              X
+            </button>
+          </div>
+          <div className="w-full flex gap-[20px]">
             {" "}
-            <button onClick={() => handleClick(true)}>sharecopy</button>
+            <input
+              type="text"
+              readOnly
+              value={url}
+              className="bg-white rounded text-black px-[5px] py-[10px]  flex-1"
+            />
+            <button
+              onClick={() => handleCopy()}
+              className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter "
+            >
+              copy
+            </button>
+          </div>
+
+          <div className="flex gap-[10px] my-[20px]">
+            {" "}
+            <button
+              onClick={() => handleClick(true)}
+              className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter "
+            >
+              share
+            </button>
             <button
               onClick={() => {
                 handleClick(false);
                 setUrl("");
               }}
+              className="border-gray-400 border p-[5px] bg-white rounded text-black font-inter "
             >
-              stopshare
+              stop-share
             </button>
-            <button onClick={() => onClose(false)}>close</button>
           </div>
         </div>
       </div>
-    </>
-  );
-}
-
-export function usefetch(options) {
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    console.log("usefetch,useeffect");
-  }, [options]);
-  return { data };
-  
-}
-
-export function App() {
-  const [url, seturl] = useState(null);
-  const myoptions = { url };
-  const { data } = usefetch({ url });
-  console.log("app rendering");
-  return (
-    <>
-      <div>app</div>
     </>
   );
 }
